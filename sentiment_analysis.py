@@ -92,3 +92,4 @@ for dateKey in sorted(date_sentiment_dict.keys()):
 print len(date_sentiment_dict)
 print date_sentiment_dict.keys()
 print OUTPUT_FILE
+
