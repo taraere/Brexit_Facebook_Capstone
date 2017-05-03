@@ -74,7 +74,7 @@ writer = csv.writer(open(OUTPUT_FILE, "wb"), delimiter=',', quotechar='', quotin
 # writer.writerow(["date", "compound_sentiment", "num_negative", "num_positive", "num_neutral"])
 
 # write header
-writer.writerow(["date", "num_comments", "mean_compound", "num_positive", "mean_positive", "mean_positive", "num_negative", "mean_negative", "num_neutral", "mean_neutral"])
+writer.writerow(["date", "num_comments", "mean_compound", "num_positive", "mean_positive", "num_negative", "mean_negative", "num_neutral", "mean_neutral"])
 
 # write rows
 for dateKey in sorted(date_sentiment_dict.keys()):
