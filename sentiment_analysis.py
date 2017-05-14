@@ -1,19 +1,20 @@
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-from nltk.tokenize import sent_tokenize
-from nltk import word_tokenize
-import string
 import csv
+import re
 
-CSV_FILE = "KeepBritainInEurope_facebook_statuses"
-TEXT_COLUMN = "status_message"
-DATE_COLUMN = "status_published"
+# CSV_FILE = "KeepBritainInEurope_facebook_statuses"
+# TEXT_COLUMN = "status_message"
+# DATE_COLUMN = "status_published"
 # CSV_FILE = "KeepBritainInEurope_facebook_comments"
 # TEXT_COLUMN = "comment_message"
 # DATE_COLUMN = "comment_published"
+CSV_FILE = "leaveeuofficial_facebook_comments"
+TEXT_COLUMN = "comment_message"
+DATE_COLUMN = "comment_published"
 
 ROOT = "/Users/Tara/Desktop/C/Writing/sentiment analysis"
 INPUT_FILE = ROOT + "/resources/" + CSV_FILE + ".csv"
-OUTPUT_FILE = ROOT + "/sentiment/" + "sentiment_" + CSV_FILE + ".csv"
+OUTPUT_FILE = ROOT + "/sentiment/" + "Sentiment_" + CSV_FILE + ".csv"
 
 def sentiment_sentence(analyser, sentence):
     return analyser.polarity_scores(sentence)
@@ -41,7 +42,10 @@ counter = 0
 with open(INPUT_FILE, 'rb') as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
-        sentence = row[TEXT_COLUMN]
+        comments = row[TEXT_COLUMN]
+        sentence1 = re.sub(r'^https?:\/\/.*[\r\n]*', '', comments, flags=re.MULTILINE)
+        sentence2 = re.sub(r'^[A-Z][a-z]+\s[A-Z][a-z]+', '', sentence1)
+        sentence = re.sub(r'^\[\[[A-Z]+\]\]', '', sentence2)
         dateTime = row[DATE_COLUMN]
         date = dateTime[0:10]
         compound = compound_sentiment_sentence(analyser, sentence)
@@ -90,6 +94,5 @@ for dateKey in sorted(date_sentiment_dict.keys()):
     writer.writerow([dateKey, numComments, meanCompound, numPositive, meanPositive, numNegative, meanNegative, numNeutral, meanNeutral])
 
 print len(date_sentiment_dict)
-print date_sentiment_dict.keys()
 print OUTPUT_FILE
 
